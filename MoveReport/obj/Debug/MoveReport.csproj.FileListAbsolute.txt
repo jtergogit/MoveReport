@@ -1,0 +1,9 @@
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.csprojResolveAssemblyReference.cache
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.csproj.GenerateResource.Cache
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.Form1.resources
+D:\repo\MoveReport\MoveReport\bin\Debug\MoveReport.exe.config
+D:\repo\MoveReport\MoveReport\bin\Debug\MoveReport.exe
+D:\repo\MoveReport\MoveReport\bin\Debug\MoveReport.pdb
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.Properties.Resources.resources
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.exe
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.pdb

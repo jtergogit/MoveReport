@@ -1,0 +1,12 @@
+D:\repo\CustomReport\CustomReport\bin\Debug\CustomReport.exe.config
+D:\repo\CustomReport\CustomReport\bin\Debug\CustomReport.exe
+D:\repo\CustomReport\CustomReport\bin\Debug\CustomReport.pdb
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.csprojResolveAssemblyReference.cache
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.Properties.Resources.resources
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.csproj.GenerateResource.Cache
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.exe
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.pdb
+D:\repo\CustomReport\CustomReport\obj\Debug\CustomReport.Form1.resources
+D:\repo\MoveReport\CustomReport\bin\Debug\CustomReport.exe.config
+D:\repo\MoveReport\CustomReport\obj\Debug\CustomReport.exe
+D:\repo\MoveReport\CustomReport\obj\Debug\CustomReport.pdb
