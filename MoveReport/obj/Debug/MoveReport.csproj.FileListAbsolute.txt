@@ -7,3 +7,5 @@ D:\repo\MoveReport\MoveReport\bin\Debug\MoveReport.pdb
 D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.Properties.Resources.resources
 D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.exe
 D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.pdb
+D:\repo\MoveReport\MoveReport\bin\Debug\Newtonsoft.Json.dll
+D:\repo\MoveReport\MoveReport\bin\Debug\Newtonsoft.Json.xml

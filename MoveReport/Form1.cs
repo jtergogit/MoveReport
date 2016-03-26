@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -97,6 +98,7 @@ namespace MoveReport
             catch (Exception ex)
             {
                 WriteLog(DateTime.Now + ex.Message);
+                toolStripStatusLabel1.Text = ex.Message;
             }
         }
 
@@ -116,6 +118,16 @@ namespace MoveReport
                     MessageBox.Show(toDir + "文件不存在");
                     return;
                 }
+
+                string[] files = Directory.GetFiles(toDir);
+                foreach (string formFileName in files)
+                {
+                    string suffix = Path.GetExtension(formFileName);
+                    if (suffix.ToLower() == ".frx")
+                    {
+                        InsertDataSource(formFileName, "ERP.Reports.SIReports");
+                    }
+                }
                 MoveReportFile("System", fromDir, toDir);
                 toolStripStatusLabel1.Text = "任务完成";
                 MessageBox.Show("任务完成");
@@ -123,6 +135,7 @@ namespace MoveReport
             catch (Exception ex)
             {
                 WriteLog(DateTime.Now + ex.Message);
+                toolStripStatusLabel1.Text = ex.Message;
             }
         }
 
@@ -132,7 +145,7 @@ namespace MoveReport
             foreach (string fromDirPath in fromDirs)
             {
                 string logisticsDirName = fromDirPath.Substring(fromDirPath.LastIndexOf("\\") + 1);
-                if ((type=="System" && logisticsDirName.ToLower() != "erp.reports.sireports") || (type == "Custom" && logisticsDirName.ToLower().StartsWith("logistics.")))
+                if ((type == "System" && logisticsDirName.ToLower() != "erp.reports.sireports") || (type == "Custom" && logisticsDirName.ToLower().StartsWith("logistics.")))
                 {
                     string[] files = Directory.GetFiles(fromDirPath);
                     foreach (string formFileName in files)
@@ -146,7 +159,7 @@ namespace MoveReport
                             toolStripStatusLabel1.Text = fileName;
                             string toFileName = GetToFileName(toDir, fileName, suffix);
                             File.Copy(formFileName, toFileName);
-                            InsertDataSource(toFileName);
+                            InsertDataSource(toFileName, logisticsDirName);
                             //File.Delete(fileName);
                             WriteLog(DateTime.Now + formFileName + "移动成功。");
                             //});
@@ -173,7 +186,7 @@ namespace MoveReport
             return filePathName;
         }
 
-        private void InsertDataSource(string filePath)
+        private void InsertDataSource(string filePath,string logistics)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -182,9 +195,11 @@ namespace MoveReport
             {
                 if (xnode.Attributes["Name"].Value == "DataSource")
                 {
-                    doc.RemoveChild(xnode);
+                    doc.SelectSingleNode("Report/Dictionary").RemoveChild(xnode);
                 }
             }
+
+            //添加数据源
             XmlNode dnode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
             doc.SelectSingleNode("Report/Dictionary").AppendChild(dnode);
 
@@ -197,8 +212,51 @@ namespace MoveReport
             dnode.Attributes.Append(datatype);
 
             XmlAttribute expression = doc.CreateAttribute("Expression");
-            expression.Value = "\"ERP.Reports.SIReports\"";
+            expression.Value = "ERP.Reports.SIReports";
             dnode.Attributes.Append(expression);
+
+            //添加分区码
+            XmlNode subareaNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            doc.SelectSingleNode("Report/Dictionary").AppendChild(subareaNode);
+
+            XmlAttribute subareaName = doc.CreateAttribute("Name");
+            subareaName.Value = "Subarea";
+            subareaNode.Attributes.Append(subareaName);
+
+            XmlAttribute subareaDataType = doc.CreateAttribute("DataType");
+            subareaDataType.Value = "System.String";
+            subareaNode.Attributes.Append(subareaDataType);
+
+            XmlAttribute subareaExpression = doc.CreateAttribute("Expression");
+            subareaExpression.Value = "分区码.xml";
+            subareaNode.Attributes.Append(subareaExpression);
+
+            //添加设置参数
+            var setting = LogisticsSetting.GetLogisticsSetting().Where(x => x.Logistics == logistics).FirstOrDefault();
+            if (setting != null)
+            {
+                foreach (var par in setting.ParamModels)
+                {
+                    XmlNode parNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+                    doc.SelectSingleNode("Report/Dictionary").AppendChild(parNode);
+
+                    XmlAttribute parName = doc.CreateAttribute("Name");
+                    parName.Value = par.Name;
+                    parNode.Attributes.Append(parName);
+
+                    XmlAttribute parDataType = doc.CreateAttribute("DataType");
+                    parDataType.Value = "System.String";
+                    parNode.Attributes.Append(parDataType);
+
+                    XmlAttribute parExpression = doc.CreateAttribute("Expression");
+                    parExpression.Value = JsonConvert.SerializeObject(par);
+                    parNode.Attributes.Append(parExpression);
+
+                    XmlAttribute parDescription = doc.CreateAttribute("Description");
+                    parDescription.Value = par.Description;
+                    parNode.Attributes.Append(parDescription);
+                }
+            }
 
             doc.Save(filePath);
         }
