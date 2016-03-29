@@ -189,7 +189,7 @@ namespace MoveReport
             XmlNodeList xlist = doc.SelectSingleNode("Report/Dictionary").SelectNodes("Parameter");
             foreach (XmlNode xnode in xlist)
             {
-                if (xnode.Attributes["Name"].Value == "DataSource")
+                if (xnode.Attributes["Name"].Value == "DataSource" || xnode.Attributes["Name"].Value == "Subarea")
                 {
                     doc.SelectSingleNode("Report/Dictionary").RemoveChild(xnode);
                 }
@@ -253,6 +253,14 @@ namespace MoveReport
             {
                 foreach (var par in setting.ParamModels)
                 {
+                    foreach (XmlNode xnode in xlist)
+                    {
+                        if (xnode.Attributes["Name"].Value == par.Name)
+                        {
+                            doc.SelectSingleNode("Report/Dictionary").RemoveChild(xnode);
+                        }
+                    }
+
                     XmlNode parNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
                     doc.SelectSingleNode("Report/Dictionary").AppendChild(parNode);
 
