@@ -15,10 +15,12 @@ namespace MoveReport
 {
     public partial class Form1 : Form
     {
+        private string projectPath = string.Empty;
+        private bool isSystem = true;
         public Form1()
         {
             InitializeComponent();
-            ProjectPath.Text = @"D:\repo\ERP";
+            //ProjectPath.Text = @"D:\repo\ERP";
             this.ReportType.Items.Add("客户自定义模版");
             this.ReportType.Items.Add("系统模版");
         }
@@ -46,17 +48,20 @@ namespace MoveReport
                 MessageBox.Show("请选择要移动的模版");
                 return;
             }
+            projectPath = ProjectPath.Text;
 
             toolStripStatusLabel1.Text = "开始移动";
 
-            string fromDir = ProjectPath.Text;
-            string toDir = ProjectPath.Text;
+            string fromDir = projectPath;
+            string toDir = projectPath;
             if (ReportType.Text == "客户自定义模版")
             {
+                isSystem = false;
                 MoveCustormReport(fromDir, toDir);
             }
             else if (ReportType.Text == "系统模版")
             {
+                isSystem = true;
                 MoveSystemReport(fromDir, toDir);
             }
             else if (ReportType.Text == "")
@@ -90,7 +95,7 @@ namespace MoveReport
                     {
                         Directory.CreateDirectory(toDir);
                     }
-                    MoveReportFile("Custom", fromDirPath, toDir);
+                    MoveReportFile(fromDirPath, toDir);
                 }
                 toolStripStatusLabel1.Text = "任务完成";
                 MessageBox.Show("任务完成");
@@ -107,7 +112,7 @@ namespace MoveReport
             try
             {
                 fromDir += @"\WillV.Web\Plugins\";
-                toDir += @"\WillV.Web\Plugins\ERP.Reports.SIReports\";
+                toDir += @"\WillV.Web\Content\ReportTemplate\";
                 if (!Directory.Exists(fromDir))
                 {
                     MessageBox.Show(fromDir + "文件不存在");
@@ -118,17 +123,7 @@ namespace MoveReport
                     MessageBox.Show(toDir + "文件不存在");
                     return;
                 }
-
-                string[] files = Directory.GetFiles(toDir);
-                foreach (string formFileName in files)
-                {
-                    string suffix = Path.GetExtension(formFileName);
-                    if (suffix.ToLower() == ".frx")
-                    {
-                        InsertDataSource(formFileName, "ERP.Reports.SIReports");
-                    }
-                }
-                MoveReportFile("System", fromDir, toDir);
+                MoveReportFile(fromDir, toDir);
                 toolStripStatusLabel1.Text = "任务完成";
                 MessageBox.Show("任务完成");
             }
@@ -139,13 +134,13 @@ namespace MoveReport
             }
         }
 
-        private void MoveReportFile(string type, string fromDir, string toDir)
+        private void MoveReportFile(string fromDir, string toDir)
         {
             string[] fromDirs = Directory.GetDirectories(fromDir);
             foreach (string fromDirPath in fromDirs)
             {
                 string logisticsDirName = fromDirPath.Substring(fromDirPath.LastIndexOf("\\") + 1);
-                if ((type == "System" && logisticsDirName.ToLower() != "erp.reports.sireports") || (type == "Custom" && logisticsDirName.ToLower().StartsWith("logistics.")))
+                if (isSystem || (!isSystem && logisticsDirName.ToLower().StartsWith("logistics.")))
                 {
                     string[] files = Directory.GetFiles(fromDirPath);
                     foreach (string formFileName in files)
@@ -159,7 +154,7 @@ namespace MoveReport
                             toolStripStatusLabel1.Text = fileName;
                             string toFileName = GetToFileName(toDir, fileName, suffix);
                             File.Copy(formFileName, toFileName);
-                            InsertDataSource(toFileName, logisticsDirName);
+                            InsertDataSource(formFileName, toFileName, logisticsDirName);
                             //File.Delete(fileName);
                             WriteLog(DateTime.Now + formFileName + "移动成功。");
                             //});
@@ -186,8 +181,9 @@ namespace MoveReport
             return filePathName;
         }
 
-        private void InsertDataSource(string filePath,string logistics)
+        private void InsertDataSource(string formFileName,string filePath,string logistics)
         {
+            bool exitSubarea = false;
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
             XmlNodeList xlist = doc.SelectSingleNode("Report/Dictionary").SelectNodes("Parameter");
@@ -215,21 +211,41 @@ namespace MoveReport
             expression.Value = "ERP.Reports.SIReports";
             dnode.Attributes.Append(expression);
 
+
             //添加分区码
-            XmlNode subareaNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
-            doc.SelectSingleNode("Report/Dictionary").AppendChild(subareaNode);
+            XmlDocument subareaXml = new XmlDocument();
+            subareaXml.Load(projectPath+@"\WillV.Web\Content\ReportTemplate\面单对应分区码.xml");
+            XmlNodeList logisticsList = subareaXml.SelectNodes("subarea/logistics");
+            string fileName = Path.GetFileNameWithoutExtension(formFileName);
+            foreach (XmlNode logisticsNode in logisticsList)
+            {
+                if (logisticsNode.Attributes["name"].Value == logistics)
+                {
+                    foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
+                    {
+                        if ((isSystem && report.Attributes["name"].Value == fileName) || (!isSystem && logisticsNode.SelectNodes("area").Count==1))
+                        {
+                            XmlNode subareaNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+                            doc.SelectSingleNode("Report/Dictionary").AppendChild(subareaNode);
 
-            XmlAttribute subareaName = doc.CreateAttribute("Name");
-            subareaName.Value = "Subarea";
-            subareaNode.Attributes.Append(subareaName);
+                            XmlAttribute subareaName = doc.CreateAttribute("Name");
+                            subareaName.Value = "Subarea";
+                            subareaNode.Attributes.Append(subareaName);
 
-            XmlAttribute subareaDataType = doc.CreateAttribute("DataType");
-            subareaDataType.Value = "System.String";
-            subareaNode.Attributes.Append(subareaDataType);
+                            XmlAttribute subareaDataType = doc.CreateAttribute("DataType");
+                            subareaDataType.Value = "System.String";
+                            subareaNode.Attributes.Append(subareaDataType);
 
-            XmlAttribute subareaExpression = doc.CreateAttribute("Expression");
-            subareaExpression.Value = "分区码.xml";
-            subareaNode.Attributes.Append(subareaExpression);
+                            XmlAttribute subareaExpression = doc.CreateAttribute("Expression");
+                            subareaExpression.Value = report.ParentNode.Attributes["name"].Value;
+                            subareaNode.Attributes.Append(subareaExpression);
+
+                            exitSubarea = true;
+                            break;
+                        }
+                    }
+                }
+            }
 
             //添加设置参数
             var setting = LogisticsSetting.GetLogisticsSetting().Where(x => x.Logistics == logistics).FirstOrDefault();
@@ -259,11 +275,26 @@ namespace MoveReport
             }
 
             doc.Save(filePath);
+
+            if (!exitSubarea)
+            {
+                NoSubareaLog(formFileName);
+            }
         }
 
         public void WriteLog(string message)
         {
             FileStream fs = new FileStream(@"D:\MoveReportLog.txt", FileMode.Append);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.Write("\r\n" + message);
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+        }
+
+        public void NoSubareaLog(string message)
+        {
+            FileStream fs = new FileStream(@"D:\NoSubareaLog.txt", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write("\r\n" + message);
             sw.Flush();
