@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<subarea>
+<logistics name="EShop.AliExpress">
+<area name="国家分拣区号.xml">
+<report name="线上发货(10x10)（LP号渠道编码）" />
+<report name="线上发货(10x10)" />
+<report name="线上发货(6x10)" />
+<report name="线上发货(A4)" />
+<report name="线上发货+产品明细(A4)" />
+<report name="线上发货不带国内物流单号(6x8)" />
+<report name="线上发货不带国内物流单号(A4)" />
+<report name="线上发货不带国内物流单号(A4)" />
+<report name="中国邮政平常小包(10x10)" />
+<report name="中国邮政平常小包+配货单(10x10)" />
+<report name="中国邮政平常小包+配货单(A4)" />
+</area>
+</logistics>
+<logistics name="ERP.Reports.BeiJingEMS">
+<area name="中邮北京平邮小包分组规则.xml">
+<report name="北京平邮 报关单(10x10)" />
+<report name="北京平邮 报关单+拣货单(10x10)" />
+<report name="北京平邮 报关单+拣货单(A4)" />
+</area>
+<area name="中邮北京挂号小包分组规则.xml">
+<report name="北京挂号 地址标签+报关单(10x10)" />
+<report name="北京挂号 地址标签+报关单+拣货单(10x10)" />
+</area>
+</logistics>
+<logistics name="ERP.Reports.Postnl">
+<area name="EU country list(荷兰标签显示EU).xml">
+<report name="荷兰邮政小包挂号含电(10×10)"/>
+<report name="荷兰邮政小包挂号含电+报关单(10×10)"/>
+<report name="荷兰邮政小包挂号含电+报关单+拣货单(10×10)"/>
+<report name="荷兰邮政小包挂号含电+拣货单(10×10)"/>
+<report name="荷兰邮政小包挂号含电+拣货单(A4)"/>
+</area>
+</logistics>
+<logistics name="ERP.Reports.Russia">
+<area name="俄罗斯平邮分区.xml">
+<report name="俄罗斯联邮通平邮" />
+</area>
+</logistics>
+<logistics name="ERP.Reports.Singapore">
+<area name="新加坡挂号派送分区.xml">
+<report name="【4PX】新加坡挂号++报关单(A4)" />
+<report name="【4PX】新加坡挂号++拣货单(10×10)" />
+<report name="新加坡挂号++报关单(A4)" />
+<report name="新加坡挂号+拣货单(10×10)" />
+</area>
+<area name="新加坡平邮派送分区.xml">
+<report name="新加坡平邮(10×10)" />
+</area>
+<area name="新加坡平邮收费分区.xml">
+<report name="【4PX】新加坡挂号++报关单(A4)" />
+<report name="【4PX】新加坡挂号++拣货单(10×10)"/>
+<report name="新加坡挂号++报关单(A4)"/>
+<repor name="新加坡挂号+拣货单(10×10)"/>
+<report name="新加坡平邮(10×10)"/>
+</area>
+</logistics>
+<logistics name="Logistics.ePacket">
+<area name="E邮宝分区码.xml">
+<report name="[E邮宝]美国(A4)" />
+</area>
+</logistics>
+<logistics name="Logistics.FourPX">
+<area name="华南挂号小包.xml">
+<report name="[4PX]广州小包挂号 拣货单(10×10) " />
+<report name="[4PX]广州小包挂号 拣货单(A4)" />
+<report name="[4PX]广州小包挂号(10×10)" />
+<report name="[4PX]华南小包挂号 拣货单(10×10)" />
+<report name="[4PX]华南小包挂号 拣货单(A4)" />
+<report name="[4PX]华南小包挂号(10×10)" />
+<report name="[4PX]华南小包平邮 拣货单(10×10)" />
+<report name="[4PX]华南小包平邮 拣货单(A4)" />
+<report name="[4PX]华南小包平邮(10×10)" />
+<report name="[4PX]美E通(10x10)" />
+</area>
+</logistics>
+<logistics name="Logistics.HHExp">
+<area name="北京平邮_100_分区地址.xml">
+<report name="华翰_北京平邮-[报关单](A4)--拣货单" />
+<report name="华翰_北京平邮-[报关单](A4)" />
+<report name="华翰_北京平邮-10X10[报关单](10x10) --拣货单" />
+<report name="华翰_北京平邮-10X10[报关单](10x10)"/>
+</area>
+<area name="厦门挂号_15_分区地址.xml">
+<report name="华翰_厦门挂号-[报关单](A4)--拣货单" />
+<report name="华翰_厦门挂号-[报关单](A4)" />
+<report name="华翰_厦门挂号-10X10[报关单](10x10)--拣货单" />
+<report name="华翰_厦门挂号-10X10[报关单](10x10)" />
+</area>
+<area name="深圳平邮BA_20_分区地址.xml">
+<report name="华翰_深圳挂号-[报关单](A4)--拣货单" />
+<report name="华翰_深圳挂号-[报关单](A4)" />
+<report name="华翰_深圳挂号-10x10[报关单](10x10)--拣货单" />
+<report name="华翰_深圳挂号-10x10[报关单](10x10)" />
+</area>
+</logistics>
+<logistics name="Logistics.SFexpress">
+<area name="顺丰流向分区.xml">
+<report name="顺丰俄罗斯挂号(10x10)" />
+<report name="顺丰俄罗斯挂号+拣货单(10x10)" />
+<report name="顺丰俄罗斯挂号+拣货单A4" />
+<report name="顺丰俄罗斯挂号A4" />
+<report name="顺丰俄罗斯平邮(10x10)" />
+<report name="顺丰俄罗斯平邮+拣货单(10x10)" />
+<report name="顺丰俄罗斯平邮+拣货单A4" />
+<report name="顺丰俄罗斯平邮A4" />
+</area>
+</logistics>
+<logistics name="Logistics.SFHLExpress">
+<area name="顺丰全球经济小包平邮分区.xml">
+<report name="顺丰-全球经济挂号小包（退件）+拣货单(10X10)" />
+<report name="顺丰-全球经济挂号小包" />
+<report name="顺丰-全球经济挂号小包+拣货单(10X10)" />
+<report name="顺丰-全球经济挂号小包+拣货单A4（退件）" />
+<report name="顺丰-全球经济挂号小包+拣货单A4" />
+<report name="顺丰-全球经济平邮小包（退件）+拣货单(10X10)" />
+<report name="顺丰-全球经济平邮小包+拣货单(10X10)" />
+<report name="顺丰-全球经济平邮小包+拣货单A4（退件）" />
+<report name="顺丰-全球经济平邮小包+拣货单A4" />
+<repor name="顺丰欧洲小包挂号(A4)"/>
+<repot name="顺丰欧洲小包平邮(10x10)"/>
+</area>
+</logistics>
+<logistics name="Logistics.Szice">
+<area name="[互联易]新平邮小包分区.xml">
+<report name="[互联易]新平邮小包(10×10)" />
+<report name="[互联易]新平邮小包(10×10)++拣货单" />
+</area>
+<area name="华南挂号小包.xml">
+<report name="[互联易]华南挂号小包(A4)" />
+</area>
+<area name="瑞典平邮.xml">
+<report name="[互联易]瑞典小包平邮(10×10)" />
+<report name="[互联易]瑞典小包平邮(10×10)++拣货单" />
+</area>
+</logistics>
+<logistics name="Logistics.ChinaPost">
+<area name="ChinaPostSortingCode.xml">
+<report name="广州小包挂号(A4)" />
+<report name="一体化面单 地址标签+报关单(10x10)" />
+<report name="一体化面单 地址标签+报关单+产品明细(10x10)" />
+<report name="一体化面单 地址标签+报关单+产品明细A4" />
+<report name="一体化面单 地址标签+报关单A4" />
+<report name="一体化面单 地址标签+产品明细A4" />
+<report name="一体化面单(10x10)" />
+<report name="一体化面单+产品明细A4）" />
+<report name="一体化面单A4" />
+<repor name="中邮一体化挂号+配货单(A4)"/>
+</area>
+<area name="ChinaPostSortingCode.xml">
+<report name="江苏小包挂号10x10" />
+<report name="一体化面单 地址标签+报关单(10x10)" />
+<report name="一体化面单 地址标签+报关单+产品明细(10x10)" />
+<report name="一体化面单 地址标签+报关单+产品明细(10x10)" />
+<report name="一体化面单 地址标签+报关单+产品明细A4" />
+<report name="一体化面单 地址标签+报关单A4" />
+<report name="一体化面单 地址标签+产品明细A4" />
+<report name="一体化面单(10x10)）" />
+<report name="一体化面单+产品明细A4" />
+<repor name="一体化面单A4"/>
+</area>
+</logistics>
+</subarea>
