@@ -9,3 +9,4 @@ D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.pdb
 D:\repo\MoveReport\MoveReport\bin\Debug\Newtonsoft.Json.dll
 D:\repo\MoveReport\MoveReport\bin\Debug\Newtonsoft.Json.xml
 D:\repo\MoveReport\MoveReport\bin\Debug\面单对应分区码.xml
+D:\repo\MoveReport\MoveReport\obj\Debug\MoveReport.csprojResolveAssemblyReference.cache
