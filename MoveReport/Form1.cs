@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -20,6 +21,7 @@ namespace MoveReport
         private string dirName = "ERP.Reports.SIReports";
         private List<string> repeats = new List<string>();
         private Dictionary<string, string> reports = new Dictionary<string, string>();
+        private bool IsPlugins = true;
 
         private string Log
         {
@@ -42,6 +44,7 @@ namespace MoveReport
             //ReportType.Text = "客户自定义模版";
             this.ReportType.Items.Add("客户自定义模版");
             this.ReportType.Items.Add("系统模版");
+            //CheckReport();
         }
 
         private void SelectFolder_Click(object sender, EventArgs e)
@@ -148,12 +151,18 @@ namespace MoveReport
         {
             try
             {
-                //fromDir += @"\WillV.Web\Plugins\";
-                //toDir += @"\WillV.Web\Plugins\" + dirName + "\\";
-
-
-                string fpath = fromDir + @"\WillV.Web\Plugins\";
-                string tpath = toDir + @"\WillV.Web\Plugins\" + dirName + "\\";
+                string fpath = string.Empty;
+                string tpath = string.Empty;
+                if (IsPlugins)
+                {
+                    fpath = fromDir + @"\WillV.Web\Plugins\";
+                    tpath = toDir + @"\WillV.Web\Plugins\" + dirName + "\\";
+                }
+                else
+                {
+                    fpath = fromDir + @"\WillV.Web\Plugins\";
+                    tpath = toDir + @"\WillV.Web\ERP\ERP.Reports\" + dirName + "\\";
+                }
 
                 if (!Directory.Exists(fpath) || !Directory.Exists(tpath))
                 {
@@ -216,7 +225,8 @@ namespace MoveReport
             foreach (string fromDirPath in fromDirs)
             {
                 string logisticsDirName = fromDirPath.Substring(fromDirPath.LastIndexOf("\\") + 1);
-                if (logisticsDirName != dirName)
+                string[] ignoreLogistics = new string[] { "ERP.Reports.PlanROrderSummary", "ERP.Reports.PurchaseOrderList" };
+                if ((IsPlugins?(logisticsDirName != dirName):true) && !ignoreLogistics.Contains(logisticsDirName))
                 {
                     string[] files = Directory.GetFiles(fromDirPath);
                     foreach (string formFileName in files)
@@ -229,7 +239,7 @@ namespace MoveReport
                             toolStripStatusLabel1.Text = fileName;
                             
                             string toFileName = GetToFileName(formFileName, toDir, fileName, suffix);
-                            File.Copy(formFileName, toFileName);
+                            File.Copy(formFileName, toFileName, true);
 
                             reports[fileName] = formFileName;
                             InsertDataSource(formFileName, toFileName, logisticsDirName);
@@ -286,6 +296,7 @@ namespace MoveReport
             }
 
             //添加数据源
+            #region
             //XmlNode dnode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
             //doc.SelectSingleNode("Report/Dictionary").AppendChild(dnode);
 
@@ -300,93 +311,182 @@ namespace MoveReport
             //XmlAttribute expression = doc.CreateAttribute("Expression");
             //expression.Value = dirName;
             //dnode.Attributes.Append(expression);
-
+            #endregion
 
             //添加分区码
-            XmlDocument RegionXml = new XmlDocument();
-            //RegionXml.Load(projectPath+ @"\WillV.Web\Plugins\ERP.Reports.SIReports\面单对应分区码.xml");
-            RegionXml.Load("面单对应分区码.xml");
-            XmlNodeList logisticsList = RegionXml.SelectNodes("region/logistics");
-            string fileName = Path.GetFileNameWithoutExtension(formFileName);
-            foreach (XmlNode logisticsNode in logisticsList)
+            #region
+            //XmlDocument RegionXml = new XmlDocument();
+            ////RegionXml.Load(projectPath+ @"\WillV.Web\Plugins\ERP.Reports.SIReports\面单对应分区码.xml");
+            //RegionXml.Load("面单对应分区码.xml");
+            //XmlNodeList logisticsList = RegionXml.SelectNodes("region/logistics");
+            //string fileName = Path.GetFileNameWithoutExtension(formFileName);
+            //foreach (XmlNode logisticsNode in logisticsList)
+            //{
+            //    if (logisticsNode.Attributes["name"].Value == logistics)
+            //    {
+            //        if (isSystem && logistics == "Logistics.ChinaPost")
+            //        {
+            //            foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
+            //            {
+            //                if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value == "ChinaPostRegisteredPartition.xml")
+            //                {
+            //                    XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                    doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+
+            //                    XmlAttribute RegionName = doc.CreateAttribute("Name");
+            //                    RegionName.Value = "Region";
+            //                    RegionNode.Attributes.Append(RegionName);
+
+            //                    XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+            //                    RegionDataType.Value = "System.String";
+            //                    RegionNode.Attributes.Append(RegionDataType);
+
+            //                    XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+            //                    RegionExpression.Value = "\"" + report.ParentNode.Attributes["name"].Value + "\"";
+            //                    RegionNode.Attributes.Append(RegionExpression);
+
+            //                    exitRegion = true;
+            //                }
+            //                else if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value == "ChinaPostSortingCode.xml")
+            //                {
+            //                    XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                    doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+
+            //                    XmlAttribute RegionName = doc.CreateAttribute("Name");
+            //                    RegionName.Value = "SortingCode";
+            //                    RegionNode.Attributes.Append(RegionName);
+
+            //                    XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+            //                    RegionDataType.Value = "System.String";
+            //                    RegionNode.Attributes.Append(RegionDataType);
+
+            //                    XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+            //                    RegionExpression.Value = "\"" + report.ParentNode.Attributes["name"].Value + "\"";
+            //                    RegionNode.Attributes.Append(RegionExpression);
+
+            //                    exitRegion = true;
+            //                }
+
+            //            }
+            //        }
+            //        else if (isSystem && logistics == "ERP.Reports.Singapore")
+            //        {
+            //            foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
+            //            {
+            //                if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value.Contains("派送分区"))
+            //                {
+            //                    XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                    doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+
+            //                    XmlAttribute RegionName = doc.CreateAttribute("Name");
+            //                    RegionName.Value = "SortingCode";
+            //                    RegionNode.Attributes.Append(RegionName);
+
+            //                    XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+            //                    RegionDataType.Value = "System.String";
+            //                    RegionNode.Attributes.Append(RegionDataType);
+
+            //                    XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+            //                    RegionExpression.Value = "\"" + report.ParentNode.Attributes["name"].Value + "\"";
+            //                    RegionNode.Attributes.Append(RegionExpression);
+
+            //                    if (report.ParentNode.Attributes["name"].Value.Contains("挂号"))
+            //                    {
+            //                        XmlNode sRegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                        doc.SelectSingleNode("Report/Dictionary").AppendChild(sRegionNode);
+
+            //                        XmlAttribute sRegionName = doc.CreateAttribute("Name");
+            //                        sRegionName.Value = "Region";
+            //                        sRegionNode.Attributes.Append(sRegionName);
+
+            //                        XmlAttribute sRegionDataType = doc.CreateAttribute("DataType");
+            //                        sRegionDataType.Value = "System.String";
+            //                        sRegionNode.Attributes.Append(sRegionDataType);
+
+            //                        XmlAttribute sRegionExpression = doc.CreateAttribute("Expression");
+            //                        sRegionExpression.Value = "\"新加坡挂号小包运费模板.xml\"";
+            //                        sRegionNode.Attributes.Append(sRegionExpression);
+            //                    }
+
+            //                    exitRegion = true;
+            //                }
+            //                else if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value.Contains("平邮收费分区"))
+            //                {
+            //                    XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                    doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+
+            //                    XmlAttribute RegionName = doc.CreateAttribute("Name");
+            //                    RegionName.Value = "Region";
+            //                    RegionNode.Attributes.Append(RegionName);
+
+            //                    XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+            //                    RegionDataType.Value = "System.String";
+            //                    RegionNode.Attributes.Append(RegionDataType);
+
+            //                    XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+            //                    RegionExpression.Value = "\"" + report.ParentNode.Attributes["name"].Value + "\"";
+            //                    RegionNode.Attributes.Append(RegionExpression);
+
+
+            //                    exitRegion = true;
+            //                }
+
+            //            }
+            //        }
+            //        else
+            //        {
+            //            foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
+            //            {
+            //                if ((isSystem && report.Attributes["name"].Value == fileName) || (!isSystem && logisticsNode.SelectNodes("area").Count == 1))
+            //                {
+            //                    XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+            //                    doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+
+            //                    XmlAttribute RegionName = doc.CreateAttribute("Name");
+            //                    RegionName.Value = "Region";
+            //                    RegionNode.Attributes.Append(RegionName);
+
+            //                    XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+            //                    RegionDataType.Value = "System.String";
+            //                    RegionNode.Attributes.Append(RegionDataType);
+
+            //                    XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+            //                    RegionExpression.Value = "\"" + report.ParentNode.Attributes["name"].Value + "\"";
+            //                    RegionNode.Attributes.Append(RegionExpression);
+
+            //                    exitRegion = true;
+            //                    break;
+            //                }
+            //            }
+            //        }
+
+            //    }
+            //}
+            #endregion
+            string reportName = Path.GetFileName(filePath); // filePath
+            Dictionary<string,string> regions = RegionXML.GetRegionXML(logistics, reportName);
+            foreach (string key in regions.Keys)
             {
-                if (logisticsNode.Attributes["name"].Value == logistics)
-                {
-                    if (isSystem && logistics == "Logistics.ChinaPost")
-                    {
-                        foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
-                        {
-                            if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value== "ChinaPostRegisteredPartition.xml")
-                            {
-                                XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
-                                doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
+                XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
+                doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
 
-                                XmlAttribute RegionName = doc.CreateAttribute("Name");
-                                RegionName.Value = "Region";
-                                RegionNode.Attributes.Append(RegionName);
+                XmlAttribute RegionName = doc.CreateAttribute("Name");
+                RegionName.Value = key;
+                RegionNode.Attributes.Append(RegionName);
 
-                                XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
-                                RegionDataType.Value = "System.String";
-                                RegionNode.Attributes.Append(RegionDataType);
+                XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
+                RegionDataType.Value = "System.String";
+                RegionNode.Attributes.Append(RegionDataType);
 
-                                XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
-                                RegionExpression.Value = "\""+report.ParentNode.Attributes["name"].Value+ "\"";
-                                RegionNode.Attributes.Append(RegionExpression);
+                XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
+                RegionExpression.Value = "\"" + regions[key] + "\"";
+                RegionNode.Attributes.Append(RegionExpression);
 
-                                exitRegion = true;
-                            }
-                            else if (isSystem && report.Attributes["name"].Value == fileName && report.ParentNode.Attributes["name"].Value == "ChinaPostSortingCode.xml")
-                            {
-                                XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
-                                doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
-
-                                XmlAttribute RegionName = doc.CreateAttribute("Name");
-                                RegionName.Value = "SortingCode";
-                                RegionNode.Attributes.Append(RegionName);
-
-                                XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
-                                RegionDataType.Value = "System.String";
-                                RegionNode.Attributes.Append(RegionDataType);
-
-                                XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
-                                RegionExpression.Value = "\""+report.ParentNode.Attributes["name"].Value+ "\"";
-                                RegionNode.Attributes.Append(RegionExpression);
-
-                                exitRegion = true;
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        foreach (XmlNode report in logisticsNode.SelectNodes("area/report"))
-                        {
-                            if ((isSystem && report.Attributes["name"].Value == fileName) || (!isSystem && logisticsNode.SelectNodes("area").Count == 1))
-                            {
-                                XmlNode RegionNode = doc.CreateNode(XmlNodeType.Element, "Parameter", null);
-                                doc.SelectSingleNode("Report/Dictionary").AppendChild(RegionNode);
-
-                                XmlAttribute RegionName = doc.CreateAttribute("Name");
-                                RegionName.Value = "Region";
-                                RegionNode.Attributes.Append(RegionName);
-
-                                XmlAttribute RegionDataType = doc.CreateAttribute("DataType");
-                                RegionDataType.Value = "System.String";
-                                RegionNode.Attributes.Append(RegionDataType);
-
-                                XmlAttribute RegionExpression = doc.CreateAttribute("Expression");
-                                RegionExpression.Value = "\""+report.ParentNode.Attributes["name"].Value+ "\"";
-                                RegionNode.Attributes.Append(RegionExpression);
-
-                                exitRegion = true;
-                                break;
-                            }
-                        }
-                    }
-                }
+                exitRegion = true;
             }
 
             //添加设置参数
+            #region
             var setting = LogisticsSetting.GetLogisticsSetting().Where(x => x.Logistics == logistics).FirstOrDefault();
             if (setting != null)
             {
@@ -420,12 +520,69 @@ namespace MoveReport
                     parNode.Attributes.Append(parDescription);
                 }
             }
+            #endregion
 
             doc.Save(filePath);
+            EditReport(filePath);
 
             if (!exitRegion)
             {
                 WriteLog(NoRegion, formFileName);
+            }
+        }
+
+        private void EditReport(string fileName)
+        {
+            StreamReader streamReader = new StreamReader(fileName);
+            string contents = streamReader.ReadToEnd().Replace("&#xD", "&#13").Replace("&#xA", "&#10").Replace("(\"", "(&quot;").Replace("\")", "&quot;)").Replace("bool IsShowPostAccount=(bool)Report.GetParameterValue(&quot;IsShowPostAccount&quot;);", "bool IsShowPostAccount= Report.GetColumnValue(&quot;Package.IsShowPostAccount&quot;).ToString()==\"True\";");
+            streamReader.Close();
+            File.WriteAllText(fileName, contents);  
+
+
+            //string input = "SHIP TO:&#xD;&#xA;[Package.ContactName]&#xD;&#xA;[Join(&quot;,&quot;,[Package.Street1],[Package.Street2])]&#xD;&#xA;[Package.City],[Package.Province][asdfadf] [Package.Zip][Package.Country]&#xD;&#xA;[StringFormat(&quot;TEL:{0}&quot;,[Package.Tel])][StringFormat(&quot;MOBILE:{[gggg]0}&quot;,[Package.Mobile])]&#xD;&#xA;[Package.CountryCN]";
+            //Regex reg = new Regex(@"\[\w+\]");
+            //MatchCollection mc = reg.Matches(input);
+            //foreach (Match m in mc)
+            //{
+            //    MessageBox.Show(m.Value);
+            //}
+
+
+        }
+
+        private void CheckReport()
+        {
+            List<string> fileNames = new List<string>();
+            foreach (string formFileName in Directory.GetFiles(@"C:\Users\windows\Desktop\ERP.Reports.SIReports"))
+            {
+                string suffix = Path.GetExtension(formFileName);
+                string fileName = Path.GetFileName(formFileName);
+                if (suffix.ToLower() == ".frx")
+                {
+                    fileNames.Add(fileName);
+                }
+            }
+
+            string[] checkPath = new string[] { @"C:\Users\windows\Desktop\Plugins-ERP1\Plugins", @"C:\Users\windows\Desktop\Plugins-ERP2\Plugins", @"C:\Users\windows\Desktop\Plugins-ERP3\Plugins" };
+            foreach (string path in checkPath)
+            {
+                string[] fromDirs = Directory.GetDirectories(path);
+                foreach (string fromDirPath in fromDirs)
+                {
+                    string[] files = Directory.GetFiles(fromDirPath);
+                    foreach (string formFileName in files)
+                    {
+                        string suffix = Path.GetExtension(formFileName);
+                        string fileName = Path.GetFileName(formFileName);
+                        if (suffix.ToLower() == ".frx")
+                        {
+                            if (!fileNames.Contains(fileName))
+                            {
+                                WriteLog(@"C:\Users\windows\Desktop\RepeatLog.txt", formFileName);
+                            }
+                        }
+                    }
+                }
             }
         }
 

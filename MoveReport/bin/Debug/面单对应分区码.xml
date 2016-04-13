@@ -12,6 +12,7 @@
 <report name="中国邮政平常小包(10x10)" />
 <report name="中国邮政平常小包+配货单(10x10)" />
 <report name="中国邮政平常小包+配货单(A4)" />
+<report name="线上发货(10x10)（LP号渠道编码）+拣货单" />
 </area>
 </logistics>
 <logistics name="ERP.Reports.BeiJingEMS">
@@ -45,15 +46,12 @@
 <report name="【4PX】新加坡挂号++拣货单(10×10)" />
 <report name="新加坡挂号++报关单(A4)" />
 <report name="新加坡挂号+拣货单(10×10)" />
+<report name="新加坡挂号  报关单(A4)" />
 </area>
 <area name="新加坡平邮派送分区.xml">
 <report name="新加坡平邮(10×10)" />
 </area>
 <area name="新加坡平邮收费分区.xml">
-<report name="【4PX】新加坡挂号++报关单(A4)" />
-<report name="【4PX】新加坡挂号++拣货单(10×10)"/>
-<report name="新加坡挂号++报关单(A4)"/>
-<report name="新加坡挂号+拣货单(10×10)"/>
 <report name="新加坡平邮(10×10)"/>
 </area>
 </logistics>
@@ -121,6 +119,7 @@
 <report name="顺丰-全球经济平邮小包+拣货单A4" />
 <report name="顺丰欧洲小包挂号(A4)"/>
 <report name="顺丰欧洲小包平邮(10x10)"/>
+<report name="欧洲专递"/>
 </area>
 </logistics>
 <logistics name="Logistics.Szice">
@@ -147,6 +146,9 @@
 <report name="一体化面单+产品明细A4）" />
 <report name="一体化面单A4" />
 <report name="中邮一体化挂号+配货单(A4)"/>
+<report name="广州E邮宝A4"/>
+<report name="广州小包挂号(A4)"/>
+<report name="颐龙 马来西亚平邮(10x10)+拣货单"/>
 </area>
 <area name="ChinaPostRegisteredPartition.xml">
 <report name="江苏小包挂号10x10" />
@@ -158,6 +160,9 @@
 <report name="一体化面单(10x10)）" />
 <report name="一体化面单+产品明细A4" />
 <report name="一体化面单A4"/>
+<report name="广州E邮宝A4"/>
+<report name="广州小包挂号(A4)"/>
+<report name="颐龙 马来西亚平邮(10x10)+拣货单"/>
 </area>
 </logistics>
 </region>

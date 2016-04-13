@@ -69,6 +69,16 @@ namespace MoveReport
             Singapore.ParamModels.Add(new ParamModel() { Name = "CustomerCode", Type = "text", Description = "客户代码", Value = "", Text = "" });
             list.Add(Singapore);
 
+            //俄罗斯
+            LogisticsSettingModel Russia = new LogisticsSettingModel();
+            Russia.Logistics = "ERP.Reports.Russia";
+            Russia.ParamModels = new List<ParamModel>();
+            Russia.ParamModels.Add(new ParamModel() { Name = "IsShowLogisticsCompany", Type = "checkbox", Description = "是否显示物流公司", Value = "", Text = "" });
+            Russia.ParamModels.Add(new ParamModel() { Name = "Signature", Type = "text", Description = "寄件人签字", Value = "", Text = "" });
+
+            Russia.ParamModels.Add(new ParamModel() { Name = "CustomerCode", Type = "text", Description = "客户代码", Value = "", Text = "" });
+            list.Add(Russia);
+
 
             //北京平邮
             LogisticsSettingModel BeiJingEMS = new LogisticsSettingModel();
@@ -145,6 +155,15 @@ namespace MoveReport
             HHExp.ParamModels.Add(new ParamModel() { Name = "Signature", Type = "text", Description = "寄件人签字", Value = "", Text = "" });
             
             list.Add(HHExp);
+
+            //淼信
+            LogisticsSettingModel Mxe56 = new LogisticsSettingModel();
+            Mxe56.Logistics = "Logistics.Mxe56";
+            Mxe56.ParamModels = new List<ParamModel>();
+            Mxe56.ParamModels.Add(new ParamModel() { Name = "IsShowLogisticsCompany", Type = "checkbox", Description = "是否显示物流公司", Value = "", Text = "" });
+            Mxe56.ParamModels.Add(new ParamModel() { Name = "Signature", Type = "text", Description = "寄件人签字", Value = "", Text = "" });
+
+            list.Add(Mxe56);
 
             //宝通达
             LogisticsSettingModel Emmis = new LogisticsSettingModel();
@@ -239,6 +258,7 @@ namespace MoveReport
             PrintTypeItems.Add(new ParamItem() { Value = "html", Text = "网页" });
             PrintTypeItems.Add(new ParamItem() { Value = "pdf", Text = "PDF" });
             Kuaidi.ParamModels.Add(new ParamModel() { Name = "PrintType", Type = "select", Description = "打印输出方式", ParamItems = PrintTypeItems, Value = "", Text = "" });
+            Kuaidi.ParamModels.Add(new ParamModel() { Name = "CustomCode", Type = "text", Description = "协议客户代码", Value = "", Text = "" });
             list.Add(Kuaidi);
 
             //一体化面单
